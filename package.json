@@ -1,0 +1,21 @@
+{
+  "name": "gaia-backend",
+  "description": "Express app exposing a single endpoint that leverages the Gaia API.",
+  "main": "bin/runServer.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamcaron/gaia-backend.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-preset-env": "^1.5.1",
+    "chai": "^4.0.1",
+    "mocha": "^3.4.2",
+    "nodemon": "^1.11.0",
+    "supertest": "^3.0.0"
+  }
+}

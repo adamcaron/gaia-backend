@@ -1,0 +1,6 @@
+if [ $RUNNING_TESTS ]; then
+  # run on different port in case app is running on 8085 already
+  export API_PORT=8086
+else
+  export API_PORT=8085
+fi
