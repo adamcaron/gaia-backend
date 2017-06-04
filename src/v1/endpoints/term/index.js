@@ -4,50 +4,27 @@ import request from 'request-promise'
 export default () => {
   const router = express.Router()
 
-  router.get('/test', (req, res) => {
-    if (true) {
-      res.json({ message: 'It\'s working' })
-      // TODO: respond with status code
-    }
-    else {
-      throw new Error
-    }
+  router.get('/test', (req, res, next) => {
+    var promise = new Promise((resolve, reject) => {
+      if (false) {
+        resolve("Stuff worked!")
+      }
+      else {
+        reject(new Error("It broke"))
+      }
+    })
+
+    promise
+    .then(result => res.json({ message: 'It\'s working' + `: ${result}` }))
+    .catch(next)
   })
 
-  router.get('/:tid/longest-preview-media-url', (req, res) => {
+  router.get('/:tid/longest-preview-media-url', (req, res, next) => {
     // TODO: validate tid input before initial request is made
 
-    // request({
-    //   uri: `http://d6api.gaia.com/vocabulary/1/${req.params.tid}`,
-    //   headers: { 'Accept': 'application/json' },
-    //   json: true
-    // })
-    // .then(response => response.terms[0].tid)
-    // .then(tid => request({
-    //   uri: `http://d6api.gaia.com/videos/term/${tid}`,
-    //   headers: { 'Accept': 'application/json' },
-    //   json: true
-    // }))
-    // .then(response => response.titles
-    //   .filter(title => typeof title.preview !== 'undefined')
-    //   .sort((a, b) => b.preview.duration - a.preview.duration)[0].preview.nid
-    // )
-    // .then(nid => request({
-    //   uri: `http://d6api.gaia.com/media/${nid}`,
-    //   headers: { 'Accept': 'application/json' },
-    //   json: true
-    // }))
-    // .then((node) => res.json(
-    //   JSON.stringify({
-    //     bcHLS: node.mediaUrls.bcHLS,
-    //     titleNid: nid
-    //   })
-    // ))
-    // .catch(reason => console.error(reason))
-
     getLongest()
-    .then(longest => res.json(longest))
-    .catch(reason => console.error(reason))
+    .then(response => res.json(response))
+    .catch(next) // ensure this catches and passes error details thrown in 'getLongest' function
 
     async function getLongest () {
       const tid = await request({
@@ -56,9 +33,7 @@ export default () => {
         json: true
       })
       .then(response => response.terms[0].tid)
-      .catch(reason => console.error(reason))
-
-      console.log('======= tid ==>\n', tid)
+      .catch(next) // term not found  OR some other error response
 
       const title = await request({
         uri: `http://d6api.gaia.com/videos/term/${tid}`,
@@ -69,18 +44,14 @@ export default () => {
         .filter(title => typeof title.preview !== 'undefined')
         .sort((a, b) => b.preview.duration - a.preview.duration)[0]
       )
-      .catch(reason => console.error(reason))
-
-      console.log('======= title ==>\n', title)
+      .catch(next) // no title for that term OR some other error response
 
       const node = await request({
         uri: `http://d6api.gaia.com/media/${title.preview.nid}`,
         headers: { 'Accept': 'application/json' },
         json: true
       })
-      .catch(reason => console.error(reason))
-
-      console.log('======= node ==>\n', node)
+      .catch(next) // no media for that node id OR some other error response
 
       return {
         bcHLS: node.mediaUrls.bcHLS,
@@ -89,23 +60,6 @@ export default () => {
         previewDuration: title.preview.duration
       }
     }
-
-    // read();
-
-    // async function read () {
-    //   var html = await getRandomPonyFooArticle();
-    //   var md = hget(html, {
-    //     markdown: true,
-    //     root: 'main',
-    //     ignore: '.at-subscribe,.mm-comments,.de-sidebar'
-    //   });
-    //   var txt = marked(md, {
-    //     renderer: new Term()
-    //   });
-    //   console.log(txt);
-    // }
-
   })
-
   return router
 }
