@@ -6,6 +6,7 @@ docker run \
   -d \
   -p $API_PORT:$API_PORT \
   -e API_PORT=$API_PORT \
+  -e NODE_ENV='test' \
   --name gaia-test \
   -v $("pwd")/src:/api/src \
   -v $("pwd")/test:/api/test \
