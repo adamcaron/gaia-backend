@@ -1,7 +1,7 @@
 import express from 'express'
+import { host, port } from '../config'
 import apiFirstVersion from './v1'
 
-const port = process.env.API_PORT || 8085
 const app = express()
 
 // init routes
@@ -13,11 +13,12 @@ app.use((req, res) => {
 })
 
 // handle server errors
-app.use((error, req, res, next) => {
+app.use((err, req, res, next) => {
+  console.error(err)
   res.status(500).json('500: Internal Server Error')
 })
 
 // listen for requests
 app.listen(port)
 
-console.log('Server running on port ' + port)
+console.log(`Server running at ${host} on port ${port}`)

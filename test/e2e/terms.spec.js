@@ -1,5 +1,6 @@
 import supertest from 'supertest'
-const request = supertest(`localhost:${process.env.API_PORT}/v1/terms`)
+import { apiUrl } from '../../config'
+const request = supertest(`${apiUrl}/terms`)
 
 describe('/terms', () => {
   describe('GET /test', () => {
@@ -10,12 +11,13 @@ describe('/terms', () => {
       .then(res => {
         expect(res.status).to.eql(200)
         expect(res.type).to.eq('application/json')
-        expect(res.body).to.eql({ message: 'It\'s working' })
+        expect(res.body.message).to.eql('It\'s working')
+        expect(res.body.details).to.eql('Stuff worked!')
       })
     })
   })
   describe('GET /:tid/longest-preview-media-url', () => {
-    xit('responds with json', () => {
+    it('responds with json', () => {
       return request
       .get('/26681/longest-preview-media-url')
       .set('Accept', 'application/json')
@@ -28,7 +30,7 @@ describe('/terms', () => {
         expect(res.body).to.have.property('bcHLS')
       })
     })
-    xit('responds with URL, node id, preview id, and preview duration', () => {
+    it('responds with URL, node id, preview id, and preview duration', () => {
       return request
       .get('/26681/longest-preview-media-url')
       .set('Accept', 'application/json')
@@ -38,9 +40,3 @@ describe('/terms', () => {
     })
   })
 })
-
-// ///////////////////////////////////////////////////
-// A
-// Build the functionailty for the API:
-// Write the test and get it to pass.
-// Handle errors

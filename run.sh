@@ -7,6 +7,3 @@ docker run \
   -e NODE_ENV='production' \
   --name gaia \
   adamcaron/gaia-backend
-
-################################
-  # ensure stack trace is not returned by Express next()

@@ -6,16 +6,16 @@ export default () => {
 
   router.get('/test', (req, res, next) => {
     var promise = new Promise((resolve, reject) => {
-      if (false) {
-        resolve("Stuff worked!")
+      if (true) {
+        resolve('Stuff worked!')
       }
       else {
-        reject(new Error("It broke"))
+        reject(new Error('It broke'))
       }
     })
 
     promise
-    .then(result => res.json({ message: 'It\'s working' + `: ${result}` }))
+    .then(result => res.json({ message: 'It\'s working', details: result }))
     .catch(next)
   })
 
@@ -61,5 +61,6 @@ export default () => {
       }
     }
   })
+
   return router
 }
