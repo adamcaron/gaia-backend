@@ -1,7 +1,6 @@
 import express from 'express'
 import { host, port } from '../config'
 import apiFirstVersion from './v1'
-
 const app = express()
 
 // init routes
