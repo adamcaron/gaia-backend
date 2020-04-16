@@ -1,6 +1,6 @@
-# Gaia Backend
+# NodeJS Backend
 
-An Express app exposing a single endpoint, which leverages the Gaia API and returns the longest preview media URL.
+An Express app exposing a single endpoint, which leverages an SVOD API and returns the longest preview media URL.
 
 ## Up and Running
 
